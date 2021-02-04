@@ -14,6 +14,7 @@ class AddFormValidationRefactoring extends UsabilityRefactoringOnElement {
         this.getRequiredInputs().map(function (requiredInput) {
             if (!requiredInput || !requiredInput.value) {
                 requiredInput.style.borderColor = "rgb(255,0,0)";
+                requiredInput.required = true;
                 invalidInputs = true;
             }
         });
@@ -86,7 +87,35 @@ class AddFormValidationRefactoring extends UsabilityRefactoringOnElement {
         return "Provide client validation to a form when the user submits it. Mandatory fields must be indicated";
     }
 
-    
+    getHTMLElement(){
+        let elem = document.createElement('div');
+        elem.appendChild(this.targetElement);
+        return elem;
+    }
+    getJS(){
+        return `
+        var ${this.identifier} = uxp.${this.identifier} = {};
+        
+        uxp.${this.identifier}.submit = (f,e) => {
+            if(f.$invalid){
+                e.preventDefault();
+                validateFields(f);
+                return;
+            }
+            //acción del formulario
+        }`;
+    }
+    addAttributes(elem){
+        if(elem.localName == 'form'){
+            elem.id = elem.name = "form_"+ this.identifier;
+            elem.setAttribute("novalidate", "");
+            elem.setAttribute("ng-submit", `uxp.${this.identifier}.submit(${elem.name}, $event)`);    
+        }else if(elem.localName == 'input' && elem.type != 'submit'){
+            elem.id = elem.name = elem.name + '_' + this.identifier;
+            elem.setAttribute("ng-model", `uxp.${this.identifier}.${elem.name}`); 
+            elem.setAttribute("ng-style", `{ 'border': ${"form_"+ this.identifier}.${elem.name}.$dirty && ${"form_"+ this.identifier}.${elem.name}.$invalid ? '1px solid red' : '' }`);    
+        }
+    }
 }
 
 export default AddFormValidationRefactoring;
