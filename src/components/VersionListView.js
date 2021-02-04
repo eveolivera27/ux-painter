@@ -32,13 +32,19 @@ class VersionListView extends React.Component {
     }
 
 
+    handleExport(version) {
+        return (event) => {
+            version.export();
+        };
+    }
+
 
     render() {
         const allVersions = window.refactoringManager.getAllVersions().map((version, i) => {
             const eyeIconColor = version.getName() == this.state.currentVersion.getName() ? "#ffc107":"black";
             return (
             <div className={'row col-12'}>
-                <div className={'col-6 offset-1'}>
+                <div className={'col-5 offset-1'}>
                     <p className={'uxpainter-message'} style={{"font-size": "18px"}} data-tip={'Clone version'}>
                         {version.getName()} {window.refactoringManager.getOriginalVersionName() == version.getName()
                          && (<i className="fas fa-lock"></i>)}
@@ -59,6 +65,11 @@ class VersionListView extends React.Component {
                     <Link className={"uxpainter-icon-link"} component={VersionView} componentProps={{version: version}}>
                         <i data-version={i} className="far fa-clone fa-lg"></i>
                     </Link>
+                </div>
+                <div className={'col-1'} style={{"display": (version.getName() == this.state.currentVersion.getName() ? 'block' : 'none')}}>
+                <a className={"uxpainter-icon-link"} onClick={this.handleExport(version)}>
+                        <i data-version={i} className="fa fa-download fa-lg"></i>
+                    </a>
                 </div>
             </div>)
         });
