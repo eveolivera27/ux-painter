@@ -18,6 +18,7 @@ class LinkToTopRefactoring extends UsabilityRefactoring {
     transform () {
         this.link = document.createElement("a");
         document.body.appendChild(this.link);
+        this.link.className = "uxp-ltt-anchor";
         this.link.style.cssText = "display:block;position:fixed;bottom:30px;right:30px;width:35px;height:35px;cursor:pointer;background: url(https://selfrefactoring.s3.amazonaws.com/resources/refactorings/totop.png) no-repeat;display:none";
         window.addEventListener("scroll", this.onScroll);
         this.link.addEventListener("click", this.onClick);
@@ -56,6 +57,26 @@ class LinkToTopRefactoring extends UsabilityRefactoring {
 
     getDemoResources() {
         return ["LinkToTopBefore.gif", "LinkToTopAfter.gif"];
+    }
+
+    getHTMLElement(){
+        return this.link;
+    }
+
+    getJS(){
+        return `
+        var ${this.identifier} = uxp.${this.identifier} = {};
+        ${this.identifier}.scrollToTop = () => $('body,html').animate({ scrollTop: 0 }, 400);
+        window.addEventListener("scroll", () => {
+            ${this.identifier}.showLTT = $(window).scrollTop() - 100 > 0;
+            if (!$scope.$$phase) $scope.$apply();
+        });`;
+    }
+    addAttributes(elem, id){
+        elem.setAttribute('ng-click', `uxp.${this.identifier}.scrollToTop()`);
+        elem.setAttribute('ng-if', `uxp.${this.identifier}.showLTT`);
+        elem.setAttribute('style','display:block');
+        return elem;
     }
 
 }
