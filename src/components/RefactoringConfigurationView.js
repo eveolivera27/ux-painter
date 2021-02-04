@@ -16,7 +16,7 @@ class RefactoringConfigurationView extends React.Component {
         if (this.props.child && this.props.child.onNext() && this.props.child.next) {
             goTo(this.props.child.next(), {refactoring: this.props.refactoring});
         }
-        else if (!this.props.child || this.props.child.onNext()) {
+        else if (!this.props.child || (this.props.child && this.props.child.onNext())) {
             goTo(RefactoringPreview, {refactoring: this.props.refactoring});
         }
     }
