@@ -1,7 +1,7 @@
 import React from "react";
 import RefactoringConfigurationView from "./RefactoringConfigurationView";
 
-class AddAutocompleteView extends React.Component {
+export default class AddAutocompleteView extends React.Component {
 
     constructor(props) {
         super(props);

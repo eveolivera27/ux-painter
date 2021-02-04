@@ -1,7 +1,7 @@
 import UsabilityRefactoringOnElement from "./UsabilityRefactoringOnElement";
 import Awesomplete from 'awesomplete/awesomplete';
 import 'awesomplete/awesomplete.css';
-import TurnInputIntoRadiosView from "../components/TurnInputIntoRadiosView";
+import AddAutoCompleteView from "../components/AddAutoCompleteView";
 import AddAutocompletePreviewer from "../previewers/AddAutocompletePreviewer";
 
 class AddAutocompleteRefactoring extends UsabilityRefactoringOnElement {
@@ -49,7 +49,7 @@ class AddAutocompleteRefactoring extends UsabilityRefactoringOnElement {
     }
 
     getView() {
-        return TurnInputIntoRadiosView;
+        return AddAutoCompleteView;
     }
 
     static asString() {
@@ -108,6 +108,32 @@ class AddAutocompleteRefactoring extends UsabilityRefactoringOnElement {
     getDemoResources() {
         return ["AddAutocompleteRefactoringBefore.gif", "AddAutocompleteRefactoringAfter.gif"];
     }
+
+    getDependencies(){
+        return {
+            id: 'Awesomplete',
+            template: `
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/awesomplete@1.1.5/awesomplete.css" />
+            <script src="https://cdn.jsdelivr.net/npm/awesomplete@1.1.5/awesomplete.min.js"></script>`
+        };
+    }
+    getHTMLElement(){
+        return this.autocompleteInput;
+    }
+    getJS(){
+        return `
+        var ${this.identifier} = uxp.${this.identifier} = {};
+
+        ${this.identifier}.init = () => {
+            new Awesomplete(document.getElementById('autocomplete_${this.identifier}'), { list: ["${this.values.join('","')}"] });
+        }`;
+    }
+    addAttributes(elem){
+        elem.setAttribute("id", "autocomplete_" + this.identifier)
+        elem.setAttribute("ng-model", `uxp.${this.identifier}.value`);
+        elem.setAttribute("ng-init", `uxp.${this.identifier}.init()`);
+    }
+
 };
 
 export default AddAutocompleteRefactoring;
