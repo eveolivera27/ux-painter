@@ -72,7 +72,7 @@ class LinkToTopRefactoring extends UsabilityRefactoring {
             if (!$scope.$$phase) $scope.$apply();
         });`;
     }
-    addAttributes(elem, id){
+    addAttributes(elem){
         elem.setAttribute('ng-click', `uxp.${this.identifier}.scrollToTop()`);
         elem.setAttribute('ng-if', `uxp.${this.identifier}.showLTT`);
         elem.setAttribute('style','display:block');

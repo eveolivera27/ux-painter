@@ -109,12 +109,12 @@ class TurnInputIntoRadiosRefactoring extends UsabilityRefactoringOnElement {
         return this.radioSetContainer;
     }
     
-    addAttributes(elem, id) {
+    addAttributes(elem) {
         if(elem.localName == 'input' && elem.type == 'radio'){   
-            elem.setAttribute("ng-model", `uxp.${this.identifier}.radio_`+id);
+            elem.setAttribute("ng-model", `uxp.${this.identifier}.radio`);
         }else if(elem.localName == 'input' && elem.type == 'text'){
-            elem.setAttribute("ng-if", `uxp.${this.identifier}.radio_` + id + ' == "Other"');
-            elem.setAttribute("ng-model", `uxp.${this.identifier}.radio_input` + id);
+            elem.setAttribute("ng-if", `uxp.${this.identifier}.radio` + ' == "Other"');
+            elem.setAttribute("ng-model", `uxp.${this.identifier}.radio_input`);
             elem.setAttribute("style", 'display: inline');
         }
         return elem;

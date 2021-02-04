@@ -152,10 +152,10 @@ class UsabilityRefactoring {
         return null;
     }
 
-    getTemplate(id){
+    getTemplate(){
         let element = this.getHTMLElement();
         let template = {
-            html: this.getHTML(element.children && element.children.length ? Object.values(element.children) : [element], id),
+            html: this.getHTML(element.children && element.children.length ? Object.values(element.children) : [element]),
             dependencies: this.getDependencies(),
             css: this.getCSS(element.children && element.children.length ? element.children : [element], '', ''),
             js: this.getJS()
@@ -172,30 +172,29 @@ class UsabilityRefactoring {
         return "";
     } 
 
-    //private function
-    addAttributes(elem, id) {
+    addAttributes(elem) {
         return elem 
     };
     
-    getHTML(children, id){
+    getHTML(children){
         let template = '';
         children.forEach(c => {
             let cc = c.cloneNode(true);
-            this.prepareElement(cc, id);
+            this.prepareElement(cc);
             template += cc.outerHTML;
         });
         return template;
         //return Object.values(children).reduce((a,b) => a + b.outerHTML, '');
     }
-    prepareElement = (elem, id) => {
+    prepareElement = (elem) => {
         let prepare = e => {
             e.style = null;
             e.removeAttribute('style');
-            e = this.addAttributes(e, id);
+            e = this.addAttributes(e);
         }
         if(elem.children && Object.values(elem.children).length){
             Object.values(elem.children).forEach(c => {
-                if (c.children) this.prepareElement(c, id);
+                if (c.children) this.prepareElement(c);
                 else prepare(c);
             });
         }
