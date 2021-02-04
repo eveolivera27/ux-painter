@@ -91,6 +91,19 @@ class AddTooltipRefactoring extends UsabilityRefactoringOnElement {
     getDemoResources() {
         return ["AddTooltipRefactoringBefore.gif","AddTooltipRefactoringAfter.gif"];
     }
+    
+    getHTMLElement(){
+        return this.getElement();
+    }
+
+    getDependencies(){
+        return {
+            id: 'Tipr',
+            template: `
+            <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/tipr@2.0.2/tipr/tipr.css" />
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/tipr@2.0.2/tipr/tipr.min.js"></script>`
+        };
+    }
 }
 
 export default AddTooltipRefactoring;
