@@ -104,7 +104,21 @@ class TurnInputIntoRadiosRefactoring extends UsabilityRefactoringOnElement {
     getDescription() {
         return "Turn a regular text field into a set of radio buttons with predefined values. 'Other' option is included to enter a different value";
     }
-
+    
+    getHTMLElement(){
+        return this.radioSetContainer;
+    }
+    
+    addAttributes(elem, id) {
+        if(elem.localName == 'input' && elem.type == 'radio'){   
+            elem.setAttribute("ng-model", `uxp.${this.identifier}.radio_`+id);
+        }else if(elem.localName == 'input' && elem.type == 'text'){
+            elem.setAttribute("ng-if", `uxp.${this.identifier}.radio_` + id + ' == "Other"');
+            elem.setAttribute("ng-model", `uxp.${this.identifier}.radio_input` + id);
+            elem.setAttribute("style", 'display: inline');
+        }
+        return elem;
+    }
 }
 
 export default TurnInputIntoRadiosRefactoring;
