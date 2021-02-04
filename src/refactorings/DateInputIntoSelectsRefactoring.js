@@ -70,6 +70,46 @@ class DateInputIntoSelectsRefactoring extends UsabilityRefactoringOnElement {
         return "Turn simple text field for dates into 3 selects for Day - Month - Year";
     }
 
+    getHTMLElement(){
+        let container = document.createElement("div");
+        container.className = "uxp-date-selects";
+        this.getSelects().forEach(s => {
+            let ss = s.cloneNode(true);
+            let opt = Object.values(ss.options);
+            for(let i = 1; i < opt.length; i++)
+                opt[i].remove();
+            container.appendChild(ss);
+        });
+        return container;
+    }
+
+    getJS(){
+        let selects = this.getSelects();
+        let days = Object.values(selects[0].options).map(x => ({ Id: x.value, Nombre: x.label }));
+        days.shift();
+        let months = Object.values(selects[1].options).map(x => ({ Id: x.value, Nombre: x.label }));
+        months.shift();
+        let years = Object.values(selects[2].options).map(x => ({ Id: x.value, Nombre: x.label }));
+        years.shift();
+        return `
+        uxp.${this.identifier} = {
+            combos: {
+                days: ${JSON.stringify(days)},
+                months: ${JSON.stringify(months)},
+                years: ${JSON.stringify(years)}
+            }
+        };`;
+    }
+
+    addAttributes(elem) {
+        if(elem.localName == 'select'){
+            let id = elem.className.includes('day') ? 'day' : elem.className.includes('month') ? 'month' : 'year';
+            elem.id = 'uxp-dis-' + id + 's';
+            elem.setAttribute("ng-model", `uxp.${this.identifier}.${id}`);
+            elem.setAttribute("ng-options", `x as x.Nombre for x in uxp.${this.identifier}.combos.${id}s`);
+        }
+    }
+
 }
 
 export default DateInputIntoSelectsRefactoring;
