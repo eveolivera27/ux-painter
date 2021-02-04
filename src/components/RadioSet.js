@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Utils from '../Utils'
 class RadioSet extends React.Component {
     constructor(props) {
         super(props);
@@ -9,7 +9,7 @@ class RadioSet extends React.Component {
     }
 
     render () {
-        const radioName = this.getRandomID();
+        const radioName = Utils.getRandomID();
         const me = this;
 
         let labelsStyle = this.props.refactoring.getLabelsStyle();
@@ -17,18 +17,18 @@ class RadioSet extends React.Component {
         labelsStyle.display = "inline";
 
         const radios = this.props.values.map((value, i) => {
-            let input = <input type={'radio'} style={{width: "auto"}} value={value} name={radioName} onChange={me.handleChange}/>;
-            let label = <label style={labelsStyle}>{value}</label>;
+            let input = <input class={'uxp-rs-radio_'+(i+1)} id={'uxp-rs-radio_'+(i+1)} type={'radio'} style={{width: "auto"}} value={value} name={radioName} onChange={me.handleChange}/>;
+            let label = <label class={'uxp-rs-label_'+(i+1)} style={labelsStyle}>{value}</label>;
             if (!me.props.refactoring.getItemStyle().margin) {
                 me.props.refactoring.getItemStyle().margin = "5px";
             }
-            return <p style={me.props.refactoring.getItemStyle()}>
+            return <p class={'uxp-rs-container'} style={me.props.refactoring.getItemStyle()}>
                 {this.renderRadioItem(input,label)}
             </p>
         });
-
-        const otherInput = <input type={'radio'} style={{width: "auto"}} value={'Other'} name={radioName} onChange={this.handleOtherRadio}/>;
-        const otherLabel = <label style={labelsStyle}>Other</label>;
+        
+        const otherInput = <input class={'uxp-rs-radio_'+(this.props.values.length+1)} id={'uxp-rs-radio_'+(this.props.values.length+1)} type={'radio'} value={'Other'} name={radioName} onChange={this.handleOtherRadio}/>;
+        const otherLabel = <label class={'uxp-rs-label_'+(this.props.values.length+1)} style={labelsStyle}>Other</label>;
 
         let otherInputStyle = this.props.refactoring.getOtherInputStyle();
         otherInputStyle.display = "none";
@@ -36,9 +36,9 @@ class RadioSet extends React.Component {
         return (
             <div className={'uxpainter-radio-set'}>
                 {radios}
-                <p style={me.props.refactoring.getItemStyle()}>
+                <p class={'uxp-rs-container'} style={me.props.refactoring.getItemStyle()}>
                     {this.renderRadioItem(otherInput,otherLabel)}
-                    <input type={'text'} style={otherInputStyle} placeholder={'Enter new value'} onChange={this.handleChange} ref={this.otherFreeInput}/>
+                    <input class="uxp-rs-control" type={'text'} style={otherInputStyle} placeholder={'Enter new value'} onChange={this.handleChange} ref={this.otherFreeInput}/>
                 </p>
             </div>
         )
@@ -59,10 +59,6 @@ class RadioSet extends React.Component {
     handleOtherRadio() {
         this.props.refactoring.getElement().value = "";
         this.otherFreeInput.current.style.display = "inline";
-    }
-
-    getRandomID() {
-        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     }
 
 }
