@@ -45,8 +45,7 @@ class Version {
             this.refactorings.forEach(refactoring => {
                 try{
                     let template = refactoring.getTemplate();
-                    let nombre = `<!--${refactoring.refactoring ? refactoring.refactoring : 'Refactoring'}-->\n`;
-                    let nombreConBarra = '\n/*' + (refactoring.refactoring ? refactoring.refactoring : 'Refactoring') + '*/\n';
+                    let nombre = '\n/*' + (refactoring.refactoring ? refactoring.refactoring : 'Refactoring') + '*/\n';
                     if (template.dependencies && !content.dependencies.find(d => d.id == template.dependencies.id)) {
                         content.dependencies.push(template.dependencies); 
                     }
@@ -56,12 +55,12 @@ class Version {
                     }
 
                     if (template.css && content.css.indexOf(template.css) == -1) {
-                        content.css += `${nombreConBarra}${template.css}`;
+                        content.css += `${nombre}${template.css}`;
                         done.css++;
                     }
 
                     if (template.js && content.js.indexOf(template.js) == -1){
-                        content.js += `${nombreConBarra}${template.js}`;
+                        content.js += `${nombre}${template.js}`;
                         done.js++;
                     }
 
@@ -72,10 +71,10 @@ class Version {
             });
             if(done.html > 0) {
                 let a = '<html ng-app="uxpApp"><head><title>Refactored template</title>'
-                        + (done.css > 0 ? '<link rel="stylesheet" href="template.css"/>' : '')
                         + '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>' 
                         + '<script src="template.js"></script>'
-                        + content.dependencies.map(d => d.template).join()             
+                        + content.dependencies.map(d => d.template).join(' ')
+                        + (done.css > 0 ? '<link rel="stylesheet" href="template.css"/>' : '')
                         + '</head><body ng-controller="UXPMainCTRL">' 
                         + content.html
                         + '</body></html>';
