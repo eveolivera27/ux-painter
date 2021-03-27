@@ -23,14 +23,8 @@ class Utils {
         var pad = 0;
         ml.split('\r\n').forEach((node,index) => {
             var indent = 0;
+           
             
-            //esta validación es porque a veces los input no están cerrados entonces no matchea el regex
-            let inputIx = node.indexOf('<input');
-            if(inputIx > -1){
-                let ixClosure = node.indexOf('>');
-                if(node.trim()[ixClosure - 1] != '/') node = node.split('>').join('/>');
-            }
-
             if (node.match( /.+<\/\w[^>]*>$/ )) {
                 indent = 0;
             } else if (node.match( /^<\/\w/ )) {
