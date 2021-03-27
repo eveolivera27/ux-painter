@@ -8,6 +8,9 @@ class AddFormValidationRefactoring extends UsabilityRefactoringOnElement {
     constructor(props) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
+        //this.getRequiredInputs().forEach(i => i.required = true); //esta línea falla al cargar el refactoring, pero es necesaria
+        //para el correcto funcionamiento del template se debe agregar el atributo required en los elementos requeridos
+        //en caso de no estar, el formulario exportado siempre será válido
     }
 
     onSubmit(event) {
@@ -15,7 +18,6 @@ class AddFormValidationRefactoring extends UsabilityRefactoringOnElement {
         this.getRequiredInputs().map(function (requiredInput) {
             if (!requiredInput || !requiredInput.value) {
                 requiredInput.style.borderColor = "rgb(255,0,0)";
-                requiredInput.required = true;
                 invalidInputs = true;
             }
         });
@@ -108,9 +110,7 @@ class AddFormValidationRefactoring extends UsabilityRefactoringOnElement {
     }
     addAttributes(elem){
         if(elem.localName == 'form'){
-            if(!elem.name)
-                elem.name = Utils.getID();
-            elem.id = "form_"+ this.identifier;
+            elem.id = elem.name = "form_"+ this.identifier;
             elem.setAttribute("novalidate", "");
             elem.setAttribute("ng-submit", `uxp.${this.identifier}.submit(${elem.name}, $event)`);    
         }else if(elem.localName == 'input' && elem.type != 'submit'){
