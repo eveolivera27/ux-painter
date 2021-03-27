@@ -115,7 +115,13 @@ class AddTooltipRefactoring extends UsabilityRefactoringOnElement {
             });
         });
 
-        return super.getCSS(children, selector, css) + `\n${c.className ? ' .' + Object.values(c.classList).join('.').trim() : c.id ? ' #' + c.id : ''} .${Object.keys(style).join('.').trim()} { \n ${ props } \n }`;
+        return super.getCSS(children, selector, css) + `\n${c.className ? ' .' + Object.values(c.classList).join('.').trim() : c.id ? ' #' + c.id : ''} .tipr_content { \n ${ props } \n }`;
+    }
+
+    getJS(){
+        return `$(document).ready(function() {
+              $('.tip').tipr();
+            });`;
     }
 }
 
