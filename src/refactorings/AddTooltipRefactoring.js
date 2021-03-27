@@ -104,6 +104,19 @@ class AddTooltipRefactoring extends UsabilityRefactoringOnElement {
             <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/tipr@2.0.2/tipr/tipr.min.js"></script>`
         };
     }
+
+    getCSS(children, selector, css){
+        let c = children.find(cc => cc.className.includes('tip'));
+        let style = this.getStyle();
+        let props = "";
+        Object.values(style).forEach(selector => {
+            Object.keys(selector).forEach(property => {
+                props += '\t' + property + ': ' + selector[property] + '; \n';
+            });
+        });
+
+        return super.getCSS(children, selector, css) + `\n${c.className ? ' .' + Object.values(c.classList).join('.').trim() : c.id ? ' #' + c.id : ''} .${Object.keys(style).join('.').trim()} { \n ${ props } \n }`;
+    }
 }
 
 export default AddTooltipRefactoring;

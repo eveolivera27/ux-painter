@@ -134,6 +134,12 @@ class AddAutocompleteRefactoring extends UsabilityRefactoringOnElement {
         elem.setAttribute("ng-init", `uxp.${this.identifier}.init()`);
     }
 
+    getCSS(children, selector, css){
+        let style = this.getStyle().highlightedElements;
+        let props = Object.keys(style).reduce((a, b) => a + ('\t' + b + ': ' + style[b] + ' !important; \n'), "");
+        return super.getCSS(children, selector, css) + `\n.awesomplete mark { \n ${ props } \n }`;
+    }
+
 };
 
 export default AddAutocompleteRefactoring;
